@@ -70,6 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.StartLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
@@ -261,7 +262,8 @@ public class Dungeon {
 		QuickSlotButton.reset();
 		Toolbar.swappedQuickslots = false;
 		
-		depth = 1;
+		//a run starts on floor 0, the start room above the first boss floor
+		depth = 0;
 		branch = 0;
 		generatedLevels.clear();
 
@@ -301,7 +303,10 @@ public class Dungeon {
 		Actor.clear();
 		
 		Level level;
-		if (branch == 0 && depth >= 1 && depth <= BossShuffle.BOSS_COUNT) {
+		if (branch == 0 && depth == 0) {
+			//floor 0: the start room
+			level = new StartLevel();
+		} else if (branch == 0 && depth >= 1 && depth <= BossShuffle.BOSS_COUNT) {
 			//boss-only dungeon: every floor is a boss floor, in a seed-shuffled order
 			level = BossShuffle.levelForDepth(depth);
 		} else if (branch == 0 && depth > BossShuffle.BOSS_COUNT) {
