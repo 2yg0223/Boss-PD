@@ -178,7 +178,8 @@ public class CityBossLevel extends Level {
 
 		Painter.fill(this, c.x, c.y+2, 1, 4, Terrain.CUSTOM_DECO_EMPTY);
 
-		Painter.set(this, c.x, arena.top, Terrain.LOCKED_DOOR);
+		//without the Dwarf King nothing can unlock the door, so it starts out open
+		Painter.set(this, c.x, arena.top, BossShuffle.SPAWN_MOBS ? Terrain.LOCKED_DOOR : Terrain.DOOR);
 
 		//exit hallway
 		Painter.fill(this, end, Terrain.CHASM);

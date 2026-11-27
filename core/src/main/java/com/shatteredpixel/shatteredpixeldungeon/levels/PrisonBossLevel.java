@@ -157,9 +157,15 @@ public class PrisonBossLevel extends Level {
 	protected boolean build() {
 		setSize(32, 32);
 		
-		state = State.START;
-		setMapStart();
-		
+		if (BossShuffle.SPAWN_MOBS) {
+			state = State.START;
+			setMapStart();
+		} else {
+			//no Tengu: start straight in the layout that appears after he is defeated
+			state = State.WON;
+			setMapEnd();
+		}
+
 		return true;
 	}
 	
@@ -618,11 +624,14 @@ public class PrisonBossLevel extends Level {
 			}
 		Random.popGenerator();
 
-		int pos;
-		do {
-			pos = randomPrisonCellPos();
-		} while (solid[pos]);
-		drop(new IronKey(10), pos);
+		//the key only opens Tengu's cell door, which is already open without him
+		if (BossShuffle.SPAWN_MOBS) {
+			int pos;
+			do {
+				pos = randomPrisonCellPos();
+			} while (solid[pos]);
+			drop(new IronKey(10), pos);
+		}
 	}
 
 	@Override

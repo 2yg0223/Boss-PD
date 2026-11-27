@@ -173,6 +173,9 @@ public class HallsBossLevel extends Level {
 		exit.right++;
 		transitions.add(exit);
 
+		//without Yog-Dzewa nothing can open the exit, so it starts out open
+		if (!BossShuffle.SPAWN_MOBS) map[exitCell] = Terrain.EXIT;
+
 		CustomTilemap vis = new CenterPieceVisuals();
 		vis.pos(ROOM_LEFT, ROOM_TOP+1);
 		customTiles.add(vis);

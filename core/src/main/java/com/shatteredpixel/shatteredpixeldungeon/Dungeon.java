@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
+import com.shatteredpixel.shatteredpixeldungeon.levels.BossShuffle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityBossLevel;
@@ -300,7 +301,13 @@ public class Dungeon {
 		Actor.clear();
 		
 		Level level;
-		if (branch == 0) {
+		if (branch == 0 && depth >= 1 && depth <= BossShuffle.BOSS_COUNT) {
+			//boss-only dungeon: every floor is a boss floor, in a seed-shuffled order
+			level = BossShuffle.levelForDepth(depth);
+		} else if (branch == 0 && depth > BossShuffle.BOSS_COUNT) {
+			//no regular floors: past the last boss floor there is only a dead end
+			level = new DeadEndLevel();
+		} else if (branch == 0) {
 			switch (depth) {
 				case 1:
 				case 2:
@@ -439,6 +446,9 @@ public class Dungeon {
 	}
 	
 	public static boolean bossLevel( int depth ) {
+		//every floor of the boss-only dungeon is a boss floor
+		if (depth >= 1 && depth <= BossShuffle.BOSS_COUNT) return true;
+
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
 	}
 

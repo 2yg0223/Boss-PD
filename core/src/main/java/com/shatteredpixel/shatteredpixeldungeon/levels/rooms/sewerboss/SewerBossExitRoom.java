@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.sewerboss;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.levels.BossShuffle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -60,7 +61,8 @@ public class SewerBossExitRoom extends ExitRoom {
 		Painter.fill( level, c.x-1, c.y+1, 3, 1, Terrain.EMPTY_SP );
 		
 		int exitCell = level.pointToCell(c);
-		Painter.set( level, exitCell, Terrain.LOCKED_EXIT );
+		//without Goo there is no key to open the exit, so leave it open
+		Painter.set( level, exitCell, BossShuffle.SPAWN_MOBS ? Terrain.LOCKED_EXIT : Terrain.EXIT );
 		LevelTransition exit = new LevelTransition(level, exitCell, LevelTransition.Type.REGULAR_EXIT);
 		exit.top--;
 		exit.left--;

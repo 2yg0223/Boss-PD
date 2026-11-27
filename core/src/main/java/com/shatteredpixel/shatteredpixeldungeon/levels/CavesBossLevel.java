@@ -118,7 +118,8 @@ public class CavesBossLevel extends Level {
 
 		setSize(WIDTH, HEIGHT);
 
-		Painter.fill(this, gate, Terrain.CUSTOM_DECO);
+		//without DM-300 nothing can destroy the gate, so it starts out open
+		Painter.fill(this, gate, BossShuffle.SPAWN_MOBS ? Terrain.CUSTOM_DECO : Terrain.EMPTY);
 
 		//set up main boss arena
 		Painter.fillEllipse(this, mainArena, Terrain.EMPTY);
@@ -206,6 +207,8 @@ public class CavesBossLevel extends Level {
 
 	@Override
 	protected void createMobs() {
+		if (!BossShuffle.SPAWN_MOBS) return;
+
 		for (int i : pylonPositions) {
 			Pylon pylon = new Pylon();
 			pylon.pos = i;

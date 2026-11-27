@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.levels.BossShuffle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -114,9 +115,11 @@ public class RatKingRoom extends SecretRoom {
 		overhang.setRect(left+1, top, width()-2, height());
 		level.customWalls.add(overhang);
 
-		RatKing king = new RatKing();
-		king.pos = center;
-		level.mobs.add( king );
+		if (BossShuffle.SPAWN_MOBS) {
+			RatKing king = new RatKing();
+			king.pos = center;
+			level.mobs.add( king );
+		}
 
 		for (Point p : getPoints()){
 			int cell = level.pointToCell(p);
