@@ -41,13 +41,21 @@ public class Knight extends Mob {
 			if (introTurns < INTRO_TURNS) {
 				introTurns++;
 				if (sprite != null) {
-					sprite.showStatus( CharSprite.DEFAULT, "..." );
+					//yellow "..."
+					sprite.showStatus( CharSprite.NEUTRAL, "..." );
 				}
 			} else {
 				//done waiting: go after the hero
 				state = HUNTING;
 				target = Dungeon.hero.pos;
-				notice();
+				if (sprite != null) {
+					//red "!" (shown as text: the usual alert icon is cleared again at the
+					// start of the same act, so it would never be seen here)
+					sprite.showStatus( CharSprite.NEGATIVE, "!" );
+				}
+				if (!BossHealthBar.isAssigned()) {
+					BossHealthBar.assignBoss( this );
+				}
 			}
 		}
 		return super.act();

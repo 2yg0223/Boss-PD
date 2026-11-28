@@ -15,7 +15,7 @@ public class KnightSprite extends MobSprite {
 
 	//which armor look of the hero sheet to use: 0 = no armor, 1 = cloth armor (what the
 	// hero starts with), 2 = leather, 3 = mail, 4 = scale, 5 = plate, 6 = class armor
-	private static final int ARMOR_TIER		= 1;
+	private static final int ARMOR_TIER		= 6;
 
 	public KnightSprite() {
 		super();
