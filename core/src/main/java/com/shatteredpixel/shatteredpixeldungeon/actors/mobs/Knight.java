@@ -69,7 +69,9 @@ public class Knight extends Mob {
 				slamStep = 0;
 				slamCells = null;
 			} else if (paralysed > 0) {
-				//CC: let the normal code spend the turn, the pattern just waits
+				//CC: the pattern is reset, and the normal code spends the turn
+				slamStep = 0;
+				slamCells = null;
 				return super.act();
 			} else {
 				return slamTurn();
