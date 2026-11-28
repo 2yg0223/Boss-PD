@@ -95,16 +95,18 @@ public class BossShuffle {
 	//depth is 1-based: depth 1 is the first boss floor
 	public static Level levelForDepth( int depth ) {
 		switch (order()[depth - 1]) {
+			//all five floors share Tengu's phase-2 room (BossArenaLevel),
+			// each with the look of a region: sewers, prison, caves, city, demon halls
 			case 0: default:
-				return new Boss1Level();       //boss1: Tengu's phase-2 room (the Knight comes later)
+				return new Boss1Level();       //boss1: sewers (the Knight comes later)
 			case 1:
-				return new SewerBossLevel();   //boss2: Goo's floor (placeholder map)
+				return new Boss2Level();       //boss2: prison
 			case 2:
-				return new CavesBossLevel();   //boss3: DM-300's floor (placeholder map)
+				return new Boss3Level();       //boss3: caves
 			case 3:
-				return new CityBossLevel();    //boss4: Dwarf King's floor (placeholder map)
+				return new Boss4Level();       //boss4: city
 			case 4:
-				return new HallsBossLevel();   //boss5: Yog-Dzewa's floor (placeholder map)
+				return new Boss5Level();       //boss5: demon halls
 		}
 	}
 }
