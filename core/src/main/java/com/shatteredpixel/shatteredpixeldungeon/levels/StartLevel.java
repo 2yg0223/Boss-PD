@@ -19,7 +19,9 @@ import com.watabou.utils.Callback;
  */
 public class StartLevel extends Level {
 
-	private static final int SIZE = 5;
+	//room size including the outer wall
+	private static final int W = 7;
+	private static final int H = 11;
 
 	{
 		color1 = 0x534f3e;
@@ -39,29 +41,30 @@ public class StartLevel extends Level {
 	@Override
 	protected boolean build() {
 
-		setSize(7, 7);
+		setSize(W, H);
 
-		for (int i=2; i < SIZE; i++) {
-			for (int j=2; j < SIZE; j++) {
-				map[i * width() + j] = Terrain.EMPTY;
+		//floor inside the ring of water
+		for (int y = 2; y <= H - 3; y++) {
+			for (int x = 2; x <= W - 3; x++) {
+				map[y * W + x] = Terrain.EMPTY;
 			}
 		}
 
-		for (int i=1; i <= SIZE; i++) {
-			map[width() + i] =
-			map[width() * SIZE + i] =
-			map[width() * i + 1] =
-			map[width() * i + SIZE] =
-				Terrain.WATER;
+		//ring of water just inside the outer wall
+		for (int x = 1; x <= W - 2; x++) {
+			map[1 * W + x] = map[(H - 2) * W + x] = Terrain.WATER;
+		}
+		for (int y = 1; y <= H - 2; y++) {
+			map[y * W + 1] = map[y * W + (W - 2)] = Terrain.WATER;
 		}
 
 		//the way out sits at the bottom, like the entrance of a dead end
-		int entrance = SIZE * width() + SIZE / 2 + 1;
+		int entrance = (H - 2) * W + W / 2;
 		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.SURFACE));
 		map[entrance] = Terrain.ENTRANCE;
 
 		//the stairs down are at the top
-		int exit = width() + SIZE / 2 + 1;
+		int exit = 1 * W + W / 2;
 		transitions.add(new LevelTransition(this, exit, LevelTransition.Type.REGULAR_EXIT));
 		map[exit] = Terrain.EXIT;
 
