@@ -36,7 +36,7 @@ public class BossShuffle {
 	}
 
 	//TEMPORARY (to check that updates install over old builds):
-	// remains right next to the way down of floor 1, holding 2 random potions.
+	// remains right next to the way down of floor 0 (start room), holding 2 random potions.
 	// Looks for the closest free cell around the exit, starting at 1 tile away.
 	public static void placeFirstFloorRemains( Level level ) {
 		LevelTransition exit = level.getTransition( LevelTransition.Type.REGULAR_EXIT );
