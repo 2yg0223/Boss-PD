@@ -408,7 +408,10 @@ public class Dungeon {
 		Statistics.qualifiedForBossRemainsBadge = false;
 		
 		level.create();
-		
+
+		//temporary: remains with potions next to the way down of floor 1
+		if (branch == 0 && depth == 1) BossShuffle.placeFirstFloorRemains( level );
+
 		if (branch == 0) Statistics.qualifiedForNoKilling = !bossLevel();
 		Statistics.qualifiedForBossChallengeBadge = false;
 		

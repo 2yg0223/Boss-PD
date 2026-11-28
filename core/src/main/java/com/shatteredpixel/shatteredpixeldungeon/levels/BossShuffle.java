@@ -1,6 +1,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 /**
@@ -29,6 +33,56 @@ public class BossShuffle {
 		Random.popGenerator();
 
 		return order;
+	}
+
+	//TEMPORARY (to check that updates install over old builds):
+	// remains right next to the way down of floor 1, holding 2 random potions.
+	// Looks for the closest free cell around the exit, starting at 1 tile away.
+	public static void placeFirstFloorRemains( Level level ) {
+		LevelTransition exit = level.getTransition( LevelTransition.Type.REGULAR_EXIT );
+		if (exit == null) return;
+
+		int cell = -1;
+		for (int r = 1; r <= 6 && cell == -1; r++) {
+			for (int y = exit.top - r; y <= exit.bottom + r && cell == -1; y++) {
+				for (int x = exit.left - r; x <= exit.right + r; x++) {
+					//only the ring that is exactly r tiles away from the exit
+					if (x != exit.left - r && x != exit.right + r
+							&& y != exit.top - r && y != exit.bottom + r) continue;
+					if (x < 0 || y < 0 || x >= level.width() || y >= level.height()) continue;
+
+					int c = x + y * level.width();
+					if (isFreeForRemains( level, c, x, y )) {
+						cell = c;
+						break;
+					}
+				}
+			}
+		}
+		if (cell == -1) return;
+
+		//separate generator so this doesn't disturb anything else
+		Random.pushGenerator( Dungeon.seedCurDepth() + 3 );
+			Heap heap = level.drop( Generator.randomUsingDefaults( Generator.Category.POTION ), cell );
+			level.drop( Generator.randomUsingDefaults( Generator.Category.POTION ), cell );
+			heap.type = Heap.Type.SKELETON;
+		Random.popGenerator();
+	}
+
+	private static boolean isFreeForRemains( Level level, int c, int x, int y ) {
+		if (!level.passable[c] || level.solid[c] || level.avoid[c] || level.water[c]) return false;
+		if (level.heaps.get( c ) != null || level.findMob( c ) != null) return false;
+
+		int terrain = level.map[c];
+		if (terrain == Terrain.ENTRANCE || terrain == Terrain.EXIT
+				|| terrain == Terrain.LOCKED_EXIT || terrain == Terrain.UNLOCKED_EXIT) return false;
+
+		//never on top of any stairs/transition
+		Point p = new Point( x, y );
+		for (LevelTransition t : level.transitions) {
+			if (t.inside( p )) return false;
+		}
+		return true;
 	}
 
 	//depth is 1-based: depth 1 is the first boss floor
