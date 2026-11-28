@@ -60,6 +60,11 @@ public abstract class BossArenaLevel extends Level {
 		return true;
 	}
 
+	//the middle of the arena
+	protected int arenaCenterCell() {
+		return (arena.left + arena.width() / 2) + (arena.top + arena.height() / 2) * W;
+	}
+
 	@Override
 	public Mob createMob() {
 		return null;
