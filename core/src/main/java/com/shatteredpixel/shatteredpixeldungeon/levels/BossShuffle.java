@@ -20,17 +20,24 @@ public class BossShuffle {
 	//and with their exits already open, so that the floor order can be tested.
 	public static final boolean SPAWN_MOBS = false;
 
+	//true: the order of the boss floors is shuffled per seed.
+	//false (for now): the floors always come in order, boss1, boss2, ... boss5, whatever the seed.
+	public static final boolean SHUFFLE_ORDER = false;
+
 	//seed-based order of the bosses, e.g. {3, 0, 4, 1, 2}. Same seed -> same order.
+	//With SHUFFLE_ORDER off it is always {0, 1, 2, 3, 4}.
 	public static int[] order() {
 		int[] order = new int[BOSS_COUNT];
 		for (int i = 0; i < BOSS_COUNT; i++) {
 			order[i] = i;
 		}
 
-		//offset the seed so this doesn't mirror other seed uses
-		Random.pushGenerator( Dungeon.seed + 7 );
-			Random.shuffle( order );
-		Random.popGenerator();
+		if (SHUFFLE_ORDER) {
+			//offset the seed so this doesn't mirror other seed uses
+			Random.pushGenerator( Dungeon.seed + 7 );
+				Random.shuffle( order );
+			Random.popGenerator();
+		}
 
 		return order;
 	}
@@ -89,15 +96,15 @@ public class BossShuffle {
 	public static Level levelForDepth( int depth ) {
 		switch (order()[depth - 1]) {
 			case 0: default:
-				return new SewerBossLevel();   //Goo
+				return new Boss1Level();       //boss1: Tengu's phase-2 room (the Knight comes later)
 			case 1:
-				return new PrisonBossLevel();  //Tengu
+				return new SewerBossLevel();   //boss2: Goo's floor (placeholder map)
 			case 2:
-				return new CavesBossLevel();   //DM-300
+				return new CavesBossLevel();   //boss3: DM-300's floor (placeholder map)
 			case 3:
-				return new CityBossLevel();    //Dwarf King
+				return new CityBossLevel();    //boss4: Dwarf King's floor (placeholder map)
 			case 4:
-				return new HallsBossLevel();   //Yog-Dzewa
+				return new HallsBossLevel();   //boss5: Yog-Dzewa's floor (placeholder map)
 		}
 	}
 }
